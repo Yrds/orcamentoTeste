@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Calculo de ingredientes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <style>
+        .spacer {
+            padding-bottom: 500px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+        <div class="container pt-5" id="crud_ingrediente">
+            <h5>Cadastro de indredientes</h5>
+            <div class="form-group"><input class="form-control" type="text" v-model="nome_ingrediente" name="nome"
+                    placeholder="Nome do ingrediente"></div>
+            <div class="form-group"><input class="form-control" type="number" step="0.01" v-model="preco_por_unidade"
+                    name="preco_por_unidade" placeholder="Preço p/ Unidade (use ponto [.] para as casas decimais)">
+            </div>
+            <button class="btn btn-primary" @click="cadastrarIndrediente()">Cadastrar ingrediente</button>
+        </div>
+        <hr>
+        <div class="container" id="crud_prato">
+            <h5>Cadastro de pratos</h5>
+            <div class="form-group"><input class="form-control" type="text" name="nome" v-model="nome_prato"
+                    placeholder="Nome do prato"></div>
+            <h6>Adicionar ingredientes</h6>
+            <div class="form-group">
+                <select class="form-control" v-model="id_ingrediente">
+                    <option value="0" disabled selected> Selecione o ingrediente</option>
+                    <option :value="ingrediente.id" v-for="ingrediente in ingredientes" class="list-group-item">
+                        {{ingrediente.nome}}</option>
+                </select>
+            </div>
+            <div class="form-group"><input class="form-control" type="number" step="0.01" name="quantidade"
+                    v-model="quantidade_ingrediente" placeholder="Quantidade (use ponto [.] para as casas decimais)">
+            </div>
+            <div class="form-group">
+                <h6 v-if="ingredientes_selecionados.length > 0">Ingredientes Adicionados: </h6>
+                <ul class="list-group" id="crud_prato_ingredientes">
+                    <li v-for="ingrediente in ingredientes_selecionados" class="list-group-item">
+                        INGREDIENTE:{{ingrediente.nome}} QTD:{{ingrediente.quantidade}}
+                    </li>
+                </ul>
+            </div>
+
+            <div class="form-group">
+                <div class="btn-group">
+                    <button @click="adicionarIngrediente()" class="btn btn-success">Adicionar ingrediente</button>
+                    <button @click="cadastrarPrato()" class="btn btn-primary">Cadastrar prato</button>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="container pb-5" id="calculo">
+            <h5>Calculo de orçamento</h5>
+            <div class="form-group">
+                <label for="">Selecione os Pratos (Aperte CTRL e Clique em quantos quiser)</label>
+                <select multiple size=10 class="form-control" v-model="pratos_selecionados">
+                    <option :value="prato.id" v-for="prato in pratos">
+                        {{prato.nome}}</option>
+                </select>
+                <label for="">Informe a Quantidade de Pessoas</label>
+                <input class="form-control" type="number" v-model="quantidade_pessoas">
+            </div>
+            <div class="form-group" v-if="pratos_selecionados.length > 0 && quantidade_pessoas > 0">
+                <h6>Orçamento</h6>
+                <ul class="list-group" id="crud_prato_ingredientes">
+                    <li v-for="ingrediente in ingredientes_orcamento" class="list-group-item">
+                        INGREDIENTE:{{ingrediente.nome}} QTD:{{ingrediente.quantidade}} PRECO:{{ingrediente.preco_por_unidade}} TOTAL:{{ingrediente.quantidade * ingrediente.preco_por_unidade}}
+                    </li>
+                </ul>
+                <div class="d-flex flex-row-reverse">
+                    <div class="pull-right">TOTAL: {{total_orcamento}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="index.js"></script>
+
+</html>
